@@ -356,7 +356,7 @@ class Lexer:
         in_tag = False
         lineno = 1
         result = []
-        for token_string in tag_re.split(self.template_string):
+        for token_string in tag_re.split(self.template_string, maxsplit=1000):
             if token_string:
                 result.append(self.create_token(token_string, None, lineno, in_tag))
                 lineno += token_string.count("\n")
@@ -401,7 +401,7 @@ class Lexer:
 class DebugLexer(Lexer):
     def _tag_re_split_positions(self):
         last = 0
-        for match in tag_re.finditer(self.template_string):
+        for match in tag_re.finditer(self.template_string, re.ASCII):
             start, end = match.span()
             yield last, start
             yield start, end
